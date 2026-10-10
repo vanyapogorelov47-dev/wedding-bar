@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Бар на свадьбу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Onest:wght@400;500;600;700&display=swap">
+<style>
+/* Лист закупки как барная карта: разделы-полки, строки с количеством и ценой, итог закреплён снизу. */
+:root{
+  --bg:#f3f5f1; --card:#ffffff; --ink:#17201b; --mute:#66706a; --faint:#9aa39d; --line:#e1e6df;
+  --accent:#1e5a45; --accent-soft:#e3eee8; --gold:#a8781f; --gold-soft:#f6eedd; --done:#9aa39d;
+  --bar-bg:#17201b; --bar-fg:#eef2ee; --bar-warn:#e0b45a; --frog:#5a2a2c;
+  --display:"Forum", Georgia, serif;
+  --body:"Onest", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111613; --card:#18201b; --ink:#e8ede9; --mute:#9aa59e; --faint:#69736d; --line:#27322b;
+  --accent:#6fc19c; --accent-soft:#1d3329; --gold:#e0b45a; --gold-soft:#2f2717; --done:#5f6a63; --bar-bg:#0b0f0d; --frog:#d9a7a3; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#111613; --card:#18201b; --ink:#e8ede9; --mute:#9aa59e; --faint:#69736d; --line:#27322b;
+  --accent:#6fc19c; --accent-soft:#1d3329; --gold:#e0b45a; --gold-soft:#2f2717; --done:#5f6a63; --bar-bg:#0b0f0d; --frog:#d9a7a3; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 var(--body); padding:0 16px}
+.wrap{max-width:980px; margin:0 auto; padding-block:40px 140px}
+button, input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+header{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:16px 32px; margin-bottom:28px}
+.eyebrow{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:600}
+h1{font-family:var(--display); font-weight:400; font-size:clamp(40px,7vw,64px); line-height:1; margin:8px 0 6px; text-wrap:balance}
+.lede{color:var(--mute); max-width:560px; margin:0}
+.tools{display:flex; flex-wrap:wrap; gap:8px}
+.btn{border:1px solid var(--line); background:var(--card); border-radius:10px; padding:8px 14px; cursor:pointer; font-size:14px; font-weight:500}
+.btn:hover{border-color:var(--accent); color:var(--accent)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--card)}
+.btn.primary:hover{opacity:.9; color:var(--card)}
+
+.facts{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:34px}
+.fact{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px}
+.fact b{display:block; font-family:var(--display); font-size:30px; font-weight:400; line-height:1.1; font-variant-numeric:tabular-nums}
+.fact span{font-size:13px; color:var(--mute)}
+
+section{margin-top:30px}
+.sec-head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:6px 16px; padding-bottom:10px; border-bottom:2px solid var(--ink)}
+.sec-head h2{font-family:var(--display); font-weight:400; font-size:30px; margin:0}
+.sec-head .note{color:var(--mute); font-size:13px; flex:1 1 220px}
+.sec-sum{font-variant-numeric:tabular-nums; font-weight:600}
+
+.row{display:grid; grid-template-columns:28px minmax(0,1fr) 128px 112px 104px 28px; gap:12px; align-items:center;
+  padding:12px 0; border-bottom:1px solid var(--line)}
+.row.head{padding:8px 0; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); font-weight:600}
+.row.head .r{text-align:right}
+.chk{width:20px; height:20px; accent-color:var(--accent); cursor:pointer}
+.name b{font-weight:600}
+.name .vol{color:var(--mute); font-size:13px; margin-left:6px; white-space:nowrap}
+.name .who{display:block; color:var(--mute); font-size:12.5px; margin-top:1px}
+.name .diff{display:inline-block; font-size:11.5px; color:var(--gold); background:var(--gold-soft); border-radius:99px; padding:0 8px; margin-left:6px}
+.name input{border:0; border-bottom:1px dashed var(--line); background:transparent; padding:2px 0; width:100%}
+.name .sub{display:flex; gap:8px; margin-top:4px}
+.name .sub input{font-size:13px; color:var(--mute)}
+.qty{display:flex; align-items:center; border:1px solid var(--line); border-radius:10px; background:var(--card); overflow:hidden}
+.qty button{border:0; background:transparent; width:34px; height:34px; cursor:pointer; font-size:18px; color:var(--mute)}
+.qty button:hover{background:var(--accent-soft); color:var(--accent)}
+.qty input{width:0; flex:1; min-width:0; border:0; background:transparent; text-align:center; font-weight:600; font-variant-numeric:tabular-nums; height:34px}
+.price{position:relative}
+.price input{width:100%; border:1px solid var(--line); border-radius:10px; background:var(--card); height:36px; padding:0 26px 0 10px; text-align:right; font-variant-numeric:tabular-nums}
+.price input::placeholder{color:var(--faint)}
+.price::after{content:"₽"; position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--faint); font-size:13px}
+.sum{text-align:right; font-variant-numeric:tabular-nums; font-weight:600}
+.sum.empty{color:var(--faint); font-weight:400}
+.del{border:0; background:transparent; color:var(--faint); cursor:pointer; font-size:18px; width:28px; height:28px; border-radius:8px}
+.del:hover{color:var(--ink); background:var(--accent-soft)}
+.row.done .name b, .row.done .name .vol, .row.done .sum{color:var(--done); text-decoration:line-through}
+.add{margin-top:10px; border:1px dashed var(--line); background:transparent; border-radius:10px; padding:9px 14px; width:100%; text-align:left; color:var(--mute); cursor:pointer}
+.add:hover{border-color:var(--accent); color:var(--accent)}
+
+.how{margin-top:40px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; color:var(--mute); font-size:14px}
+.how b{color:var(--ink)}
+.how ul{margin:8px 0 0; padding-left:18px}
+
+.bar{position:fixed; left:0; right:0; bottom:0; background:var(--bar-bg); color:var(--bar-fg); border-top:1px solid var(--line); padding:12px 16px calc(12px + env(safe-area-inset-bottom, 0px))}
+.bar-in{max-width:980px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; gap:8px 28px}
+.bar .total{font-family:var(--display); font-size:32px; line-height:1; font-variant-numeric:tabular-nums}
+.bar small{display:block; font-size:12px; opacity:.65; font-family:var(--body)}
+.bar .meta{display:flex; flex-wrap:wrap; gap:4px 22px; font-size:13.5px; opacity:.85; font-variant-numeric:tabular-nums}
+.bar .warn{color:var(--bar-warn)}
+.bar .sync{opacity:.75}
+.bar .sync.ok::before{content:"●"; color:#6fc19c; margin-right:6px}
+.bar .sync.off, .bar .sync.pass{color:var(--bar-warn); opacity:1}
+
+/* жабки из приглашения: маска, цвет берётся из темы */
+.frogs{margin-top:56px; display:grid; justify-items:center; gap:18px; color:var(--frog)}
+.frog{display:block; background:currentColor; -webkit-mask:var(--src) center/contain no-repeat; mask:var(--src) center/contain no-repeat}
+.frog.duo{width:min(420px, 100%); aspect-ratio:720/423}
+.toast-line{font-family:var(--display); font-size:28px; color:var(--ink)}
+.dancers{display:flex; justify-content:center; align-items:flex-end; gap:clamp(6px,2.5vw,22px); flex-wrap:wrap; opacity:.9}
+.dancers .frog{height:clamp(56px,11vw,92px)}
+.dancers .frog:nth-child(odd){transform:translateY(-6px) rotate(-3deg)}
+.dancers .frog:nth-child(even){transform:rotate(3deg)}
+@media (prefers-reduced-motion: no-preference){
+  .dancers .frog{animation:hop 2.4s ease-in-out infinite}
+  .dancers .frog:nth-child(2n){animation-delay:-.6s} .dancers .frog:nth-child(3n){animation-delay:-1.3s}
+}
+@keyframes hop{50%{translate:0 -5px}}
+
+.toast{position:fixed; left:50%; bottom:96px; transform:translateX(-50%); background:var(--accent); color:var(--card); padding:9px 16px; border-radius:10px; font-size:14px}
+
+@media (max-width:720px){
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .row{grid-template-columns:24px minmax(0,1fr) 28px; gap:8px 10px}
+  .row.head{display:none}
+  .row > .qty{grid-column:2 / 3; grid-row:2; max-width:150px}
+  .row > .price{grid-column:2 / 3; grid-row:3; max-width:150px}
+  .row > .sum{grid-column:2 / 4; grid-row:2 / 4; align-self:center}
+  .row > .del{grid-column:3; grid-row:1}
+}
+@media print{
+  body{background:#fff; padding:0} .tools, .add, .del, .bar, .qty button{display:none}
+  .wrap{padding:0} .qty, .price input{border:0}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">23 октября · Дворец Кваренги · 48 гостей</div>
+      <h1>Бар на свадьбу</h1>
+      <p class="lede">Сколько брать — по анкетам гостей, с запасом 15%. Меняйте количество, вписывайте цены за штуку, отмечайте купленное — сумма считается сама, а правки видны и Ване, и Рите.</p>
+    </div>
+    <div class="tools">
+      <button class="btn" id="copy" type="button">Скопировать список</button>
+      <button class="btn" id="reset" type="button">Как в расчёте</button>
+      <button class="btn" id="theme" type="button" aria-label="Сменить тему">◐</button>
+    </div>
+  </header>
+
+  <div class="facts">
+    <div class="fact"><b>48</b><span>человек на банкете</span></div>
+    <div class="fact"><b>~39</b><span>пьют алкоголь</span></div>
+    <div class="fact"><b>~7</b><span>только безалкогольное</span></div>
+    <div class="fact"><b>18:00–23:00</b><span>банкет, сбор с 17:30</span></div>
+  </div>
+
+  <div id="sections"></div>
+
+  <div class="how">
+    <b>Как посчитано.</b> Пьющий гость — около 8 порций за вечер (бокал 150 мл, 50 мл крепкого или банка 0,33), из них ~2,5 — пиво поставщика.
+    Остальное делится между напитками, которые гость отметил в анкете; бокал шампанского на тост — всем. Не заполнившие анкету — как средний гость.
+    <ul>
+      <li>Пиво: уточните у поставщика, коробками по сколько он продаёт, и округлите.</li>
+      <li>Миксеры и вода — прикидка; сначала спросите, что даёт банкетный зал.</li>
+    </ul>
+  </div>
+
+  <footer class="frogs" aria-hidden="true">
+    <span class="frog duo" style="--src:url(frogs/duo.png)"></span>
+    <div class="toast-line">За&nbsp;Ваню и&nbsp;Риту!</div>
+    <div class="dancers">
+      <span class="frog" style="--src:url(frogs/tamb.png); aspect-ratio:155/260"></span>
+      <span class="frog" style="--src:url(frogs/y1.png); aspect-ratio:158/260"></span>
+      <span class="frog" style="--src:url(frogs/y2.png); aspect-ratio:125/260"></span>
+      <span class="frog" style="--src:url(frogs/y3.png); aspect-ratio:192/260"></span>
+      <span class="frog" style="--src:url(frogs/dance2.png); aspect-ratio:117/260"></span>
+    </div>
+  </footer>
+</div>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="bar-in">
+    <div><small>Итого</small><span class="total" id="total">0 ₽</span></div>
+    <div class="meta" id="meta"></div>
+  </div>
+</div>
+
+<script>
+const SECTIONS = [
+  {id:'wine', title:'Вино и шампанское', note:'Покупаете сами', items:[
+    {id:'champ',  name:'Шампанское',            vol:0.75, qty:18, who:'20 гостей + бокал на тост всем пьющим'},
+    {id:'wdry',   name:'Белое сухое',           vol:0.75, qty:9,  who:'15 гостей — самое популярное вино'},
+    {id:'wsemi',  name:'Белое полусладкое',     vol:0.75, qty:2,  who:'4 гостя'},
+    {id:'rdry',   name:'Красное сухое',         vol:0.75, qty:5,  who:'9 гостей'},
+    {id:'rsemi',  name:'Красное полусладкое',   vol:0.75, qty:5,  who:'9 гостей'},
+    {id:'nawine', name:'Безалкогольное вино',   vol:0.75, qty:3,  who:'Ангелина, Ксюша, Дмитрий З., Анастасия П., возможно Анастасия К.'}
+  ]},
+  {id:'strong', title:'Крепкое', note:'Покупаете сами', items:[
+    {id:'whisky', name:'Виски',   vol:0.7, qty:2, who:'9 гостей'},
+    {id:'vodka',  name:'Водка',   vol:0.5, qty:2, who:'Каминские; «ёрш» и «кровавая Мэри» от Дмитрия Х.'},
+    {id:'cognac', name:'Коньяк',  vol:0.5, qty:1, who:'Евгений К., Денис Д., Константин А.'},
+    {id:'gin',    name:'Джин',    vol:0.7, qty:1, who:'Евгений К., Виктория П., Дмитрий Х.'},
+    {id:'rum',    name:'Ром',     vol:0.7, qty:1, who:'Денис К., Ольга Л., Максим Ц.'},
+    {id:'tequila',name:'Текила',  vol:0.7, qty:1, who:'Ольга Л., Дмитрий Х. («текила-бум»)'},
+    {id:'cider',  name:'Сидр',    vol:0.33, qty:15, who:'8 гостей', unit:'шт'}
+  ]},
+  {id:'beer', title:'Пиво от поставщика', note:'Банки 0,33 — заказ у поставщика', items:[
+    {id:'weiss',  name:'Вайсбир',                     vol:0.33, qty:51, who:'Премиальный, рекламируем — почти каждому по банке', unit:'бан'},
+    {id:'lager',  name:'Классический лагер',          vol:0.33, qty:25, who:'Базовое пиво, «ёрш»', unit:'бан'},
+    {id:'october',name:'Лагер «October»',             vol:0.33, qty:20, who:'Для разнообразия', unit:'бан'},
+    {id:'stout',  name:'Овсяный стаут',               vol:0.33, qty:17, who:'Для любителей тёмного', unit:'бан'},
+    {id:'nalager',name:'Безалкогольный лагер',        vol:0.33, qty:17, who:'Фомичёвы просили; водители', unit:'бан'},
+    {id:'grape',  name:'Фруктовое б/а · грейпфрут',   vol:0.33, qty:14, who:'Непьющим и освежиться', unit:'бан'},
+    {id:'apricot',name:'Фруктовое б/а · абрикос',     vol:0.33, qty:14, who:'Непьющим и освежиться', unit:'бан'}
+  ]},
+  {id:'mix', title:'Миксеры и безалкогольное', note:'Прикидка — сначала узнайте, что даёт зал', items:[
+    {id:'tonic',  name:'Тоник',              vol:1, qty:4, who:'Джин, «текила-бум»; 10 гостей будут разбавлять'},
+    {id:'cola',   name:'Кола',               vol:1, qty:4, who:'Виски, ром'},
+    {id:'colaz',  name:'Cola Zero',          vol:1, qty:2, who:'Константин Слагода'},
+    {id:'juice',  name:'Сок апельсиновый',   vol:1, qty:4, who:'Водка с соком, непьющие'},
+    {id:'tomato', name:'Томатный сок',       vol:1, qty:2, who:'«Кровавая Мэри»'},
+    {id:'tabasco',name:'Табаско',            vol:0, qty:1, who:'«Кровавая Мэри», «табаско с джином»'},
+    {id:'water',  name:'Вода',               vol:1.5, qty:12, who:'Всем'}
+  ]}
+];
+
+/* Общий бэкенд — Google Apps Script (bar-backend.gs). Пустой API — всё живёт только в этом браузере. */
+const API = '';
+const KEY = 'svadba-bar-v2';
+const GUESTS = 48;
+let S = load();
+let pass = '';
+try{ pass = localStorage.getItem(KEY + ':pass') || ''; }catch(e){}
+if(location.hash.length > 1){
+  pass = decodeURIComponent(location.hash.slice(1));
+  try{ localStorage.setItem(KEY + ':pass', pass); }catch(e){}
+  history.replaceState(null, '', location.pathname + location.search);   // пароль не висит в адресной строке
+}
+
+function load(){
+  try{ const d = JSON.parse(localStorage.getItem(KEY)); if(d && d.rows && d.custom) return d; }catch(e){}
+  try{   // перенос из первой версии, где свои позиции были массивом
+    const o = JSON.parse(localStorage.getItem('svadba-bar-v1'));
+    if(o && o.rows){ const c = {}; (o.custom || []).forEach(x => c[x.id] = Object.assign({t:1}, x)); return {rows:o.rows, custom:c}; }
+  }catch(e){}
+  return {rows:{}, custom:{}};
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const st = id => S.rows[id] || (S.rows[id] = {});
+const itemsOf = sec => sec.items.concat(Object.values(S.custom)
+  .filter(c => c.sec === sec.id && !c.del).sort((a,b) => (a.c || 0) - (b.c || 0)));
+
+/* ── синхронизация: каждая правка помечается временем t, на сервере побеждает свежая ── */
+const pending = {rows:{}, custom:{}};
+let pushTimer = null, syncState = API ? 'wait' : 'local', lastSync = null;
+function touchRow(id){ const r = st(id); r.t = Date.now(); pending.rows[id] = r; changed(); }
+function touchCustom(id){ const c = S.custom[id]; c.t = Date.now(); pending.custom[id] = c; changed(); }
+function changed(){ save(); if(!API) return; clearTimeout(pushTimer); pushTimer = setTimeout(push, 700); }
+
+function merge(remote){
+  if(!remote) return false;
+  let diff = false;
+  ['rows','custom'].forEach(k => Object.entries(remote[k] || {}).forEach(([id, v]) => {
+    if(pending[k][id]) return;                                 // свою неотправленную правку не затираем
+    const mine = S[k][id];
+    if(!mine || (+v.t || 0) > (+mine.t || 0)){ S[k][id] = v; diff = true; }
+  }));
+  if(diff) save();
+  return diff;
+}
+async function call(body){
+  const r = body
+    ? await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(Object.assign({pass}, body))})
+    : await fetch(API + '?pass=' + encodeURIComponent(pass) + '&_=' + Date.now());
+  const d = await r.json();
+  if(!d.ok) throw new Error(d.error || 'fail');
+  return d;
+}
+async function push(){
+  const body = {rows:pending.rows, custom:pending.custom};
+  if(!Object.keys(body.rows).length && !Object.keys(body.custom).length) return;
+  pending.rows = {}; pending.custom = {};
+  try{ const d = await call(body); ok(); if(merge(d.state)) rerender(); }
+  catch(e){                                                     // вернуть в очередь и попробовать позже
+    Object.assign(pending.rows, body.rows); Object.assign(pending.custom, body.custom);
+    fail(e); clearTimeout(pushTimer); pushTimer = setTimeout(push, 8000);
+  }
+}
+async function pull(){
+  if(!API || document.hidden) return;
+  try{ const d = await call(); ok(); if(merge(d.state)) rerender(); }catch(e){ fail(e); }
+}
+function ok(){ syncState = 'ok'; lastSync = new Date(); totals(); }
+function fail(e){ syncState = String(e.message) === 'pass' ? 'pass' : 'off'; totals(); }
+function rerender(){   // не сбивать того, кто сейчас печатает в поле
+  const a = document.activeElement;
+  if(a && a.tagName === 'INPUT' && a.type !== 'checkbox'){ totals(); return; }
+  render();
+}
+const qtyOf = it => { const v = st(it.id).qty; return v == null ? it.qty : v; };
+const priceOf = it => +st(it.id).price || 0;
+const rub = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const volTxt = v => v ? String(v).replace('.', ',') + ' л' : '';
+
+function render(){
+  document.getElementById('sections').innerHTML = SECTIONS.map(sec =>
+    '<section data-sec="'+sec.id+'"><div class="sec-head"><h2>'+sec.title+'</h2><span class="note">'+sec.note+'</span>'
+    + '<span class="sec-sum" data-secsum="'+sec.id+'"></span></div>'
+    + '<div class="row head"><span></span><span>Позиция</span><span>Количество</span><span class="r">Цена за шт</span><span class="r">Сумма</span><span></span></div>'
+    + itemsOf(sec).map(rowHtml).join('')
+    + '<button class="add" type="button" data-add="'+sec.id+'">+ Добавить позицию</button></section>'
+  ).join('');
+  totals();
+}
+
+function rowHtml(it){
+  const s = st(it.id), q = qtyOf(it), custom = !!it.custom;
+  const diff = !custom && q !== it.qty ? '<span class="diff">в расчёте '+it.qty+'</span>' : '';
+  const name = custom
+    ? '<input id="n-'+it.id+'" data-f="name" value="'+esc(it.name)+'" placeholder="Название" aria-label="Название">'
+      + '<div class="sub"><input id="w-'+it.id+'" data-f="who" value="'+esc(it.who)+'" placeholder="заметка"></div>'
+    : '<b>'+esc(it.name)+'</b><span class="vol">'+volTxt(it.vol)+'</span>'+diff+'<span class="who">'+esc(it.who)+'</span>';
+  return '<div class="row'+(s.done ? ' done' : '')+'" data-id="'+it.id+'">'
+    + '<input class="chk" type="checkbox" id="c-'+it.id+'" data-f="done" aria-label="Куплено"'+(s.done ? ' checked' : '')+'>'
+    + '<div class="name">'+name+'</div>'
+    + '<div class="qty"><button type="button" data-step="-1" aria-label="Меньше">−</button>'
+    + '<input id="q-'+it.id+'" data-f="qty" inputmode="numeric" value="'+q+'" aria-label="Количество"><button type="button" data-step="1" aria-label="Больше">+</button></div>'
+    + '<div class="price"><input id="p-'+it.id+'" data-f="price" inputmode="decimal" placeholder="цена" value="'+(s.price || '')+'" aria-label="Цена за штуку"></div>'
+    + '<div class="sum" data-sum="'+it.id+'"></div>'
+    + (custom ? '<button class="del" type="button" data-del="'+it.id+'" aria-label="Удалить">×</button>' : '<span></span>')
+    + '</div>';
+}
+
+function totals(){
+  let total = 0, liters = 0, alcL = 0, missing = 0, bought = 0, all = 0;
+  SECTIONS.forEach(sec => {
+    let ss = 0;
+    itemsOf(sec).forEach(it => {
+      const q = qtyOf(it), p = priceOf(it), sum = q * p;
+      const el = document.querySelector('[data-sum="'+it.id+'"]');
+      if(el){ el.textContent = p ? rub(sum) : '—'; el.classList.toggle('empty', !p); }
+      ss += sum;
+      liters += q * (it.vol || 0);
+      if(sec.id !== 'mix' && !/б\/а|безалког/i.test(it.name || '')) alcL += q * (it.vol || 0);
+      if(q > 0){ all++; if(!p) missing++; if(st(it.id).done) bought++; }
+    });
+    const h = document.querySelector('[data-secsum="'+sec.id+'"]');
+    if(h) h.textContent = ss ? rub(ss) : '';
+    total += ss;
+  });
+  document.getElementById('total').textContent = rub(total);
+  document.getElementById('meta').innerHTML =
+    '<span>'+rub(total / GUESTS)+' на гостя</span>'
+    + '<span>алкоголя '+alcL.toFixed(1).replace('.', ',')+' л</span>'
+    + '<span>куплено '+bought+' из '+all+'</span>'
+    + (missing ? '<span class="warn">без цены: '+missing+'</span>' : '')
+    + '<span class="sync '+syncState+'">'+syncText()+'</span>';
+}
+function syncText(){
+  if(syncState === 'local') return 'только в этом браузере';
+  if(syncState === 'wait')  return 'подключаюсь…';
+  if(syncState === 'pass')  return 'нужен пароль — откройте ссылку с паролем';
+  if(syncState === 'off')   return 'нет связи, правки отправятся позже';
+  return 'общий с Ритой · ' + lastSync.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
+}
+
+const findItem = id => { for(const s of SECTIONS){ const it = itemsOf(s).find(i => i.id === id); if(it) return it; } };
+
+document.addEventListener('input', e => {
+  const f = e.target.dataset.f, row = e.target.closest('.row');
+  if(!f || !row) return;
+  const id = row.dataset.id, s = st(id), it = findItem(id);
+  if(f === 'qty'){ const v = parseInt(e.target.value, 10); s.qty = isNaN(v) ? 0 : Math.max(0, v); }
+  if(f === 'price'){ s.price = parseFloat(String(e.target.value).replace(/\s/g, '').replace(',', '.')) || 0; }
+  if(f === 'done'){ s.done = e.target.checked; row.classList.toggle('done', s.done); }
+  if((f === 'name' || f === 'who') && it.custom){ it[f] = e.target.value; touchCustom(id); }
+  else touchRow(id);
+  totals();
+});
+document.addEventListener('change', e => {
+  if(e.target.dataset.f === 'qty') render();   // обновить пометку «в расчёте N»
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.step){
+    const id = b.closest('.row').dataset.id, it = findItem(id);
+    st(id).qty = Math.max(0, qtyOf(it) + +b.dataset.step); touchRow(id); render();
+  }
+  if(b.dataset.add){
+    const id = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+    S.custom[id] = {id, sec:b.dataset.add, name:'', who:'', vol:0, qty:1, custom:true, c:Date.now()};
+    touchCustom(id); render(); const n = document.getElementById('n-'+id); if(n) n.focus();
+  }
+  if(b.dataset.del){
+    const id = b.dataset.del;
+    S.custom[id].del = true; touchCustom(id); render();
+  }
+});
+
+document.getElementById('reset').addEventListener('click', () => {
+  // количества — к расчёту; цены, отметки и свои позиции остаются
+  Object.keys(S.rows).forEach(id => { if('qty' in S.rows[id]){ delete S.rows[id].qty; touchRow(id); } });
+  render(); toast('Количества вернулись к расчёту, цены сохранены');
+});
+document.getElementById('copy').addEventListener('click', () => {
+  const lines = [];
+  SECTIONS.forEach(sec => {
+    const list = itemsOf(sec).filter(it => qtyOf(it) > 0);
+    if(!list.length) return;
+    lines.push(sec.title.toUpperCase());
+    list.forEach(it => lines.push((st(it.id).done ? '✓ ' : '— ') + (it.name || 'без названия') + (it.vol ? ' ' + volTxt(it.vol) : '')
+      + ' × ' + qtyOf(it) + (priceOf(it) ? ' = ' + rub(qtyOf(it) * priceOf(it)) : '')));
+    lines.push('');
+  });
+  lines.push('Итого: ' + document.getElementById('total').textContent);
+  const text = lines.join('\n');
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+    .then(() => toast('Список скопирован'), () => { prompt('Скопируйте список:', text); });
+});
+document.getElementById('theme').addEventListener('click', () => {
+  const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+  try{ localStorage.setItem(KEY + ':theme', r.dataset.theme); }catch(e){}
+});
+try{ const t = localStorage.getItem(KEY + ':theme'); if(t) document.documentElement.dataset.theme = t; }catch(e){}
+
+let toastT;
+function toast(msg){
+  let t = document.querySelector('.toast');
+  if(!t){ t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2200);
+}
+
+render();
+if(API){
+  // всё, что есть локально, — на сервер; там при конфликте всё равно победит более свежая правка
+  ['rows','custom'].forEach(k => Object.entries(S[k]).forEach(([id, v]) => { if(!v.t) v.t = 1; pending[k][id] = v; }));
+  (Object.keys(pending.rows).length || Object.keys(pending.custom).length ? push() : pull());
+  setInterval(pull, 15000);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) pull(); });
+}
+</script>
+</body>
+</html>
