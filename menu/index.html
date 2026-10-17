@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F1E4D8">
+<title>Меню · Иван и Маргарита</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wine:#5C1229; --wine-lift:#7C1B36; --cream:#F1E4D8; --blush:#C98F8C;
+  --plum:#46101F; --mute:#7C4A46; --line:rgba(92,18,41,.3);
+  --display:'Cormorant Garamond', Georgia, serif;
+  --body:'Manrope', system-ui, -apple-system, sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0 }
+html,body{ height:100%; background:var(--cream) }
+body{
+  color:var(--plum); font-family:var(--body); font-weight:300;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+
+/* ---------- вкладки ---------- */
+.tabs{
+  flex:none; display:flex; justify-content:center; gap:6px;
+  padding:calc(10px + env(safe-area-inset-top)) 16px 10px;
+  background:var(--cream); border-bottom:.5px solid var(--line); z-index:2;
+}
+.tab{
+  font:500 11px/1 var(--body); letter-spacing:.3em; text-transform:uppercase;
+  color:var(--mute); background:none; border:.5px solid transparent;
+  padding:10px 16px 10px calc(16px + .3em); border-radius:99px; cursor:pointer;
+}
+.tab[aria-selected="true"]{ color:var(--cream); background:var(--wine) }
+
+/* ---------- листание ---------- */
+.pages{
+  flex:1; display:flex; overflow-x:auto; overflow-y:hidden;
+  scroll-snap-type:x mandatory; scrollbar-width:none; overscroll-behavior-x:contain;
+}
+.pages::-webkit-scrollbar{ display:none }
+.page{
+  flex:0 0 100%; min-width:0; scroll-snap-align:start; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  background:radial-gradient(120% 50% at 50% 0%, #F8EEE5 0%, var(--cream) 60%);
+  padding:14px 14px calc(14px + env(safe-area-inset-bottom));
+}
+.frame{
+  position:relative; max-width:560px; margin:0 auto;
+  border:1px solid rgba(92,18,41,.5); padding:28px 20px 0;
+}
+.frame::before{ content:''; position:absolute; inset:5px; border:.5px solid rgba(92,18,41,.25); pointer-events:none }
+
+/* ---------- шапка ---------- */
+.head{ text-align:center }
+.duo{ width:112px; margin:0 auto 6px; display:block }
+.kicker{ font-size:10px; letter-spacing:.44em; text-transform:uppercase; color:var(--mute); padding-left:.44em }
+.names{
+  font-family:var(--display); font-weight:300; color:var(--wine);
+  font-size:clamp(17px, 5.2vw, 30px); letter-spacing:.08em; text-transform:uppercase;
+  line-height:1.1; margin-top:8px; white-space:nowrap;
+}
+.names i{ font-style:italic; text-transform:none; color:var(--blush); letter-spacing:0; padding:0 .15em }
+.title{ font-family:var(--display); font-style:italic; font-weight:300; font-size:52px; line-height:1; color:var(--wine); margin-top:4px }
+.sub{ font-size:9.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--mute); padding-left:.3em; margin-top:8px }
+.rule{ width:150px; height:1px; margin:16px auto 0; border:0; background:linear-gradient(90deg,transparent,var(--blush),transparent) }
+
+/* ---------- позиции ---------- */
+.menu{ margin-top:18px; text-align:center }
+.cat{
+  font-size:10px; font-weight:500; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--wine); display:flex; align-items:center; gap:10px;
+  margin:28px 0 12px; padding-left:.32em;
+}
+.cat:first-child{ margin-top:0 }
+.cat::before,.cat::after{ content:''; flex:1; height:.5px; background:var(--line) }
+.dish{ margin-bottom:14px }
+.dish h3{ font-family:var(--display); font-weight:500; font-size:21px; line-height:1.15; color:var(--plum) }
+.dish p{ font-size:12.5px; line-height:1.5; color:var(--mute); margin-top:2px }
+.joke{
+  font-family:var(--display); font-style:italic; font-size:16px; line-height:1.3;
+  color:var(--wine-lift); margin-top:4px;
+}
+.joke::before{ content:'❦ '; font-style:normal; font-size:12px; color:var(--blush) }
+
+/* ---------- подвал ---------- */
+.foot{ position:relative; text-align:center; border-top:.5px solid var(--line); margin-top:26px; padding:18px 0 0; min-height:150px }
+.foot-k{ font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:var(--mute); padding-left:.4em }
+.foot-t{ font-family:var(--display); font-style:italic; font-size:21px; line-height:1.25; color:var(--wine); margin:6px auto 0; max-width:16em }
+.note{ font-size:11px; color:var(--mute); margin-top:10px; padding:0 70px }
+.frog{ position:absolute; bottom:0; height:96px }
+.fl{ left:2px } .fr{ right:2px }
+.next{
+  display:inline-block; margin:22px 0 28px; font:500 11px/1 var(--body);
+  letter-spacing:.3em; text-transform:uppercase; color:var(--wine);
+  background:none; border:.5px solid var(--wine); border-radius:99px;
+  padding:12px 20px 12px calc(20px + .3em); cursor:pointer;
+}
+.spacer{ height:110px }
+</style>
+</head>
+<body>
+
+<nav class="tabs" role="tablist">
+  <button class="tab" role="tab" aria-selected="true" data-go="0">Еда</button>
+  <button class="tab" role="tab" aria-selected="false" data-go="1">Бар</button>
+</nav>
+
+<div class="pages" id="pages">
+
+  <!-- ═══════════ 1 · ЕДА ═══════════ -->
+  <section class="page" aria-label="Еда"><div class="frame">
+    <header class="head">
+      <img class="duo" src="img/duo_full.png" alt="">
+      <div class="kicker">23 · октября · 2026</div>
+      <div class="names">Иван<i>&amp;</i>Маргарита</div>
+      <div class="title">Меню</div>
+      <div class="sub">фуршет · угощайтесь весь вечер</div>
+      <hr class="rule">
+    </header>
+
+    <main class="menu">
+      <div class="cat">Холодные закуски</div>
+      <div class="dish"><h3>Сырные шарики</h3><p>Твёрдый и сливочный сыр, чеснок, зелень, ореховая обсыпка</p><div class="joke">Круглые, как обручальные кольца. Только съедобные.</div></div>
+
+      <div class="cat">Тапасы</div>
+      <div class="dish"><h3>С лососем и каперсами</h3><p>Хрустящий багет, сливочный сыр, слабосолёный лосось, каперсы, укроп</p><div class="joke">Каперсы — не горошек. Проверено опытным путём.</div></div>
+      <div class="dish"><h3>Горгонзола с грушей</h3><p>Багет, горгонзола, груша, мёд, грецкий орех</p><div class="joke">Голубая плесень — кузина пенициллина. Никита, этот тапас смотрит на вас с подозрением.</div></div>
+      <div class="dish"><h3>С хамоном</h3><p>Багет, хамон, томат, оливковое масло, руккола</p><div class="joke">Испанцы вялили его годами — ешьте медленно, из уважения.</div></div>
+
+      <div class="cat">Мини-круассаны</div>
+      <div class="dish"><h3>С курицей</h3><p>Слоёный круассан, куриное филе, сыр, листья салата, соус</p><div class="joke">Круассан французский, курица наша. Дружба народов в одном укусе.</div></div>
+      <div class="dish"><h3>С рикоттой</h3><p>Круассан, нежная рикотта, свежие овощи, зелень</p></div>
+      <div class="dish"><h3>С красной рыбой</h3><p>Круассан, лосось, сливочный сыр, огурец, салат</p></div>
+
+      <div class="cat">Канапе</div>
+      <div class="dish"><h3>Сыр и виноград</h3><p>Выдержанный сыр, сладкий виноград</p><div class="joke">Как жених и невеста: по отдельности не подаются.</div></div>
+      <div class="dish"><h3>Бри с клубникой</h3><p>Сыр бри, свежая клубника, мята</p><div class="joke">Корочка бри — тоже благородная плесень. Никита, мы предупредили.</div></div>
+      <div class="dish"><h3>Оливка · вяленый томат · моцарелла</h3><p>Оливка, вяленый томат, мини-моцарелла, базилик</p><div class="joke">Три этажа на одной шпажке. Собирали дольше, чем свадебный торт.</div></div>
+      <div class="dish"><h3>Красная рыба и огурец</h3><p>Лосось, свежий огурец, сливочный сыр</p></div>
+      <div class="dish"><h3>Креветка гриль и ананас</h3><p>Креветка на гриле, ананас</p><div class="joke">Ни лактозы, ни пенициллина. Самое безопасное блюдо вечера.</div></div>
+
+      <div class="cat">Мини-тарталетки</div>
+      <div class="dish"><h3>Цыплёнок, пармезан и фисташка</h3><p>Песочная корзиночка, куриное филе, пармезан, фисташка, сливочный соус</p><div class="joke">Фисташка здесь для вкуса. Ну и немного для красоты.</div></div>
+      <div class="dish"><h3>С креветочным муссом</h3><p>Корзиночка, креветки, сливочный сыр, лимон, зелень</p></div>
+      <div class="dish"><h3>С грибным паштетом</h3><p>Корзиночка, шампиньоны, лук, сливочное масло</p><div class="joke">Грибы, но не те, из которых делают пенициллин. Никита, выдыхайте.</div></div>
+
+      <div class="cat">Мини-салаты</div>
+      <div class="dish"><h3>Мимоза</h3><p>Рыбные консервы, яйцо, картофель, морковь, лук, сыр, майонез</p><div class="joke">Вкус школьного детства. Осторожно: рядом могут оказаться друзья Риты из школы.</div></div>
+      <div class="dish"><h3>Греческий</h3><p>Огурец, томаты, сладкий перец, красный лук, маслины, фета, оливковое масло, орегано</p><div class="joke">Самое лёгкое блюдо вечера — после него можно сразу на танцпол.</div></div>
+      <div class="dish"><h3>Авокадо с креветками</h3><p>Авокадо, креветки, томаты черри, листья салата, лайм</p><div class="joke">Ни грамма лактозы. Денис, это ваш звёздный час.</div></div>
+
+      <div class="cat">Горячие закуски</div>
+      <div class="dish"><h3>Жульен</h3><p>Курица и шампиньоны в сливочном соусе под сырной корочкой</p><div class="joke">Горячий, как первый танец молодых.</div></div>
+      <div class="dish"><h3>Кесадилья с курицей</h3><p>Пшеничная тортилья, курица, сыр, сладкий перец, сальса</p><div class="joke">Мексика передаёт привет и просит кричать «Горько!».</div></div>
+      <div class="dish"><h3>Киш с лососем в тесте фило</h3><p>Тесто фило, лосось, яйцо, сливки, сыр</p><div class="joke">Сливки и сыр. Денис, это киш-мат.</div></div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-k">музыка</div>
+      <div class="foot-t">Подходите к диджею и заказывайте свои треки</div>
+      <div class="note">Состав ориентировочный — при аллергии уточните у официанта</div>
+      <button class="next" data-go="1">Напитки →</button>
+      <div class="spacer"></div>
+      <img class="frog fl" src="img/tamb.png" alt="">
+      <img class="frog fr" src="img/y3.png" alt="">
+    </footer>
+  </div></section>
+
+  <!-- ═══════════ 2 · БАР ═══════════ -->
+  <section class="page" aria-label="Бар"><div class="frame">
+    <header class="head">
+      <img class="duo" src="img/duo_full.png" alt="">
+      <div class="kicker">23 · октября · 2026</div>
+      <div class="names">Иван<i>&amp;</i>Маргарита</div>
+      <div class="title">Напитки</div>
+      <div class="sub">бар · наливайте и не стесняйтесь</div>
+      <hr class="rule">
+    </header>
+
+    <main class="menu">
+      <div class="cat">Белое вино</div>
+      <div class="dish"><h3>Шато Пино Эксклюзив «Беленькое»</h3><p>Белое сухое</p></div>
+      <div class="dish"><h3>Pearly Bay</h3><p>Белое сухое</p></div>
+      <div class="dish"><h3>Caucasian «Джарагъ»</h3><p>Белое полусладкое</p></div>
+
+      <div class="cat">Красное вино</div>
+      <div class="dish"><h3>Шато Пино Эксклюзив «Красненькое»</h3><p>Красное сухое</p></div>
+      <div class="dish"><h3>Bialoni Киндзмараули</h3><p>Красное полусладкое</p></div>
+
+      <div class="cat">Сидр</div>
+      <div class="dish"><h3>Абрау-Дюрсо Лайт</h3><p>Фруктовый, белый полусладкий</p></div>
+
+      <div class="cat">Пиво</div>
+      <div class="dish"><h3>Вайсбир</h3><p>Пшеничное нефильтрованное — гордость вечера</p></div>
+      <div class="dish"><h3>Классический лагер</h3><p>Светлое</p></div>
+      <div class="dish"><h3>Лагер «October»</h3><p>Светлое, сезонное</p></div>
+      <div class="dish"><h3>Овсяный стаут</h3><p>Тёмное</p></div>
+
+      <div class="cat">Крепкое</div>
+      <div class="dish"><h3>Виски</h3></div>
+      <div class="dish"><h3>Коньяк</h3></div>
+      <div class="dish"><h3>Джин</h3></div>
+      <div class="dish"><h3>Ром</h3></div>
+      <div class="dish"><h3>Водка</h3></div>
+
+      <div class="cat">Без алкоголя</div>
+      <div class="dish"><h3>Artis Sauvignon Blanc</h3><p>Безалкогольное белое вино</p></div>
+      <div class="dish"><h3>Artis Chardonnay</h3><p>Безалкогольное белое вино</p></div>
+      <div class="dish"><h3>Безалкогольный лагер</h3><p>Пиво</p></div>
+      <div class="dish"><h3>Фруктовое безалкогольное</h3><p>Грейпфрут · абрикос</p></div>
+      <div class="dish"><h3>Тоник Chillout English</h3></div>
+      <div class="dish"><h3>Кола «Добрый»</h3><p>Обычная и без сахара</p></div>
+      <div class="dish"><h3>Соки</h3><p>Яблочный · томатный</p></div>
+      <div class="dish"><h3>Вода</h3><p>Негазированная</p></div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-k">собери сам</div>
+      <div class="foot-t">Джин + тоник · виски + кола · водка + томатный сок</div>
+      <div class="note">Пейте в радость, танцуйте до утра — и берегите друг друга</div>
+      <button class="next" data-go="0">← Еда</button>
+      <div class="spacer"></div>
+      <img class="frog fl" src="img/y1.png" alt="">
+      <img class="frog fr" src="img/dance2.png" alt="">
+    </footer>
+  </div></section>
+
+</div>
+
+<script>
+const box = document.getElementById('pages');
+const tabs = document.querySelectorAll('.tab');
+const go = i => {
+  box.children[i].scrollTop = 0;
+  box.scrollTo({left: i * box.clientWidth, behavior: 'smooth'});
+};
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => go(+b.dataset.go)));
+box.addEventListener('scroll', () => {
+  const i = Math.round(box.scrollLeft / box.clientWidth);
+  tabs.forEach((t, k) => t.setAttribute('aria-selected', k === i));
+}, {passive: true});
+if (location.hash === '#bar') requestAnimationFrame(() => box.scrollLeft = box.clientWidth);
+</script>
+</body>
+</html>
